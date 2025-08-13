@@ -26,8 +26,31 @@ const create=async(req,res)=>{
         throw err;
     }
 }
+
+const login=async(req,res)=>{
+   try{
+    const data=await userService.login(req.body);
+    return res.status(200).json({
+        data,
+        status:true,
+        message:"successfully fetched the token",
+        err:{}
+    })
+
+   }
+   catch(err){
+     return res.status(500).json({
+        data:{},
+        status:false,
+        message:"not able to fetch the token",
+        err:{}
+     })
+
+   }
+}
 export{
     create,
-    testRouter
+    testRouter,
+    login
 }
 
