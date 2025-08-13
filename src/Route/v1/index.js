@@ -14,6 +14,11 @@ router.get("/user/protected",authMiddleware,(req,res)=>{
     return res.status(200).json({
         user:req.user
     })
-})
+});
+
+router.get("/user/profile",authMiddleware,UserController.getUserData);
+
+router.post("/user/logout",authMiddleware,UserController.logout);
+
 
 export default router;

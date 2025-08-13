@@ -1,18 +1,30 @@
 import jwt from "jsonwebtoken"
 import { JWT_SECRET } from "../Config/serverConfig.js";
-const authMiddleware=(req,res,next)=>{
+import BlackListToken from "../Model/BlackListedToken.js";
+const authMiddleware=async(req,res,next)=>{
     try{
-        const authHeader=req.headers.authorization;
-        if(!authHeader || !authHeader.startsWith("Bearer ")){
-            return res.status(400).json({
-                msg:"token is not passed"
-            })
-        }
-        const token=authHeader.split(" ")[1];
-        const user=jwt.verify(token,JWT_SECRET);
-        req.user=user;
-        next();
-        
+      let token=null;
+      if(req.cookies.token){
+        token=req.cookies.token;
+      }
+      else if(req.headers.authorization&&req.headers.authorization.startsWith("Bearer ")){
+        token=req.headers.authorization.split(" ")[1];
+      }
+      
+      if(!token){
+        return res.status(500).json({
+            msg:"token is not provided"
+        })
+      }
+      const blackListToken=await BlackListToken.findOne({token:token});
+      if(blackListToken){
+        return res.status(400).json({
+            msg:"Please login in again to move forward"
+        })
+      }
+      const user=jwt.verify(token,JWT_SECRET);
+      req.user=user;
+      next();
 
     }
     catch(err){
