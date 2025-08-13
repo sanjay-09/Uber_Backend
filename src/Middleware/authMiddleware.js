@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken"
 import { JWT_SECRET } from "../Config/serverConfig.js";
 import BlackListToken from "../Model/BlackListedToken.js";
-const authMiddleware=async(req,res,next)=>{
+const authMiddleware=(roleKey)=>{
+  return async(req,res,next)=>{
     try{
       let token=null;
       if(req.cookies.token){
@@ -22,8 +23,8 @@ const authMiddleware=async(req,res,next)=>{
             msg:"Please login in again to move forward"
         })
       }
-      const user=jwt.verify(token,JWT_SECRET);
-      req.user=user;
+      const decoded=jwt.verify(token,JWT_SECRET);
+      req[roleKey]=decoded;
       next();
 
     }
@@ -49,4 +50,6 @@ const authMiddleware=async(req,res,next)=>{
     }
 
 }
+}
+
 export default authMiddleware;

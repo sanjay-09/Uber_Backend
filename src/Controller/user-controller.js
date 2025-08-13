@@ -53,7 +53,7 @@ const login=async(req,res)=>{
 }
 const getUserData=async(req,res)=>{
     try{
-        console.log(req.user);
+       
         const data=await userService.getById(req.user.id);
         return res.status(200).json({
             data:data,
