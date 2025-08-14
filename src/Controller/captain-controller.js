@@ -1,6 +1,7 @@
-import { CaptainService} from "../service/index.js";
+import { CaptainService, BlackListTokenService} from "../service/index.js";
 
 const captainService=new CaptainService();
+const blackListService=new BlackListTokenService();
 
 const create=async(req,res)=>{
     try{
@@ -67,8 +68,34 @@ const getCaptainProfile=async(req,res)=>{
         })
     }
 }
+
+const logout=async(req,res)=>{
+    try{
+        let token=null;
+        if(req.cookies.token){
+            token=req.cookies.token;
+        }
+        else if(req.headers.authorization&&req.headers.authorization.startsWith("Bearer ")){
+            token=req.headers.authorization.split(" ")[1];
+        }
+       await blackListService.create({token});
+       return res.status(200).json({
+        msg:"successfully logout"
+       })
+
+    }
+    catch(err){
+        return res.status(500).json({
+            data:{},
+            status:false,
+            message:"Not able to logout",
+            err:{}
+        })
+    }
+}
 export{
     create,
     login,
-    getCaptainProfile
+    getCaptainProfile,
+    logout
 }

@@ -31,5 +31,6 @@ router.get("/captain/protected",authMiddleware("captain"),(req,res)=>{
     })
 })
 router.get("/captain/profile",authMiddleware("captain"),CaptainController.getCaptainProfile);
+router.post("/captain/logout",authMiddleware("captain"),CaptainController.logout);
 
 export default router;
