@@ -32,7 +32,7 @@ const create=async(req,res)=>{
 const login=async(req,res)=>{
    try{
     const data=await userService.login(req.body);
-    res.cookie('token',data);
+    res.cookie('token',data.token);
     return res.status(200).json({
         data,
         status:true,
@@ -42,6 +42,7 @@ const login=async(req,res)=>{
 
    }
    catch(err){
+
      return res.status(500).json({
         data:{},
         status:false,
@@ -64,6 +65,7 @@ const getUserData=async(req,res)=>{
 
     }
     catch(err){
+        console.log(err);
         return res.status(500).json({
             data:{},
             status:fase,
@@ -86,13 +88,7 @@ const logout=async(req,res)=>{
 
           res.clearCookie("token");
 
-        if(!token){
-            return res.status(200).json({
-                msg:"logged out successfully,token was not present",
-
-            })
-
-        }
+       
 
         await blackTokenService.create({token:token});
         return res.status(200).json({

@@ -6,6 +6,7 @@ const authMiddleware=(roleKey)=>{
     try{
       let token=null;
       if(req.cookies.token){
+        console.log(req.cookies.token);
         token=req.cookies.token;
       }
       else if(req.headers.authorization&&req.headers.authorization.startsWith("Bearer ")){
@@ -17,6 +18,7 @@ const authMiddleware=(roleKey)=>{
             msg:"token is not provided"
         })
       }
+     
       const blackListToken=await BlackListToken.findOne({token:token});
       if(blackListToken){
         return res.status(400).json({
@@ -29,7 +31,7 @@ const authMiddleware=(roleKey)=>{
 
     }
     catch(err){
-        console.log(err.name);
+
         if(err.name=='JsonWebTokenError'){
             return res.status(400).json({
             msg:"invalid token"
