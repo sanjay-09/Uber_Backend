@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 
 const rideCreateValidator=[
     body("origin").exists({checkFalsy:true}).withMessage("origin is the mandatory field").bail().isLength({min:3}).withMessage("origin length cannot be less than 3"),
@@ -6,6 +6,13 @@ const rideCreateValidator=[
     body("vehicleType").exists({checkFalsy:true}).withMessage("vechileType is the mandatory field").bail()
     
 ]
+
+const rideFareValidator=[
+    query("origin").exists({checkFalsy:true}).withMessage("origin is the mandatory field").bail().isLength({min:3}).withMessage("origin length cannot be less than 3"),
+    query("destination").exists({checkFalsy:true}).withMessage("destination is the mandatory field").bail().isLength({min:3}).withMessage("destination length cannot be less than 3 "),
+
+]
 export {
-    rideCreateValidator
+    rideCreateValidator,
+    rideFareValidator
 }

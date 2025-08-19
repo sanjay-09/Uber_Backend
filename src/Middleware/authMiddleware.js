@@ -4,6 +4,7 @@ import BlackListToken from "../Model/BlackListedToken.js";
 const authMiddleware=(roleKey)=>{
   return async(req,res,next)=>{
     try{
+      console.log(req.headers.authorization);
       let token=null;
       if(req.cookies.token){
         console.log(req.cookies.token);

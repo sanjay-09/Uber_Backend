@@ -32,7 +32,7 @@ const create=async(req,res)=>{
 const login=async(req,res)=>{
    try{
     const data=await userService.login(req.body);
-    res.cookie('token',data.token);
+    res.cookie('token',data);
     return res.status(200).json({
         data,
         status:true,

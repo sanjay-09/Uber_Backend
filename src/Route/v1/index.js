@@ -5,7 +5,8 @@ import { userLoginValidator,userCreateValidator } from "../../Utils/userValidato
 import Validator from "../../Middleware/validatorMiddleware.js";
 import { captainCreateValidator, captainLoginValidator } from "../../Utils/captainValidators.js";
 import { LocationCoordinatesValidator, LocationDistanceValidator, LocationInputValidator } from "../../Utils/locationValidators.js";
-import { rideCreateValidator } from "../../Utils/rideValidator.js";
+import { rideCreateValidator, rideFareValidator } from "../../Utils/rideValidator.js";
+import Ride from "../../Model/Ride.js";
 
 const router=express.Router();
 
@@ -50,6 +51,7 @@ router.get("/getSuggestions",LocationInputValidator,authMiddleware("user"),Locat
 //ride
 
 router.post("/ride/create",rideCreateValidator,authMiddleware("user"),RideController.create);
+router.get("/ride/getFare",rideFareValidator,authMiddleware("user"),RideController.ridesFare);
 
 
 router.post("/ride",(req,res)=>{

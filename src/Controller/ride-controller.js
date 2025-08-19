@@ -27,6 +27,36 @@ const create=async(req,res)=>{
         })
     }
 }
+
+const ridesFare=async(req,res)=>{
+    try{
+        const finalData={
+            origin:req.query.origin,
+            destination:req.query.destination
+        }
+        const data=await rideService.allFares(finalData);
+        return res.status(200).json({
+            data:data,
+            status:true,
+            message:"successfully fetched the details",
+            err:{}
+
+        })
+
+
+
+    }
+    catch(err){
+        return res.status(500).json({
+            data:{},
+            status:false,
+            message:"not able to fetch the details",
+            err:err
+        })
+
+    }
+}
 export {
-    create
+    create,
+    ridesFare
 }

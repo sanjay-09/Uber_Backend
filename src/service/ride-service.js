@@ -91,6 +91,27 @@ class RideService{
 
     }
 
+    async allFares(data){
+        try{
+            const {origin,destination}=data;
+            const res=await this.getDistanceAndTime(origin,destination);
+
+        const totalFare=this.getFare(res.distance,res.duration);
+        const formatted = {
+  auto: totalFare.auto.toFixed(2),
+  motorcycle: totalFare.motorcycle.toFixed(2),
+  car: totalFare.car.toFixed(2),
+};
+        return formatted;
+            
+
+        }
+        catch(err){
+             throw err;
+
+        }
+    }
+
    
 }
 export default RideService;
