@@ -6,21 +6,76 @@ import appRouter from "./Route/index.js"
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import axios from "axios";
+import http from "http"
+import {Server} from "socket.io"
+
+import User from "./Model/user.js";
+import Captain from "./Model/Captain.js";
+
 const setUpAndStartServer=()=>{
    const app=express();
+   const server=http.createServer(app);
+   const io=new Server(server,{
+    cors:{
+      origin:"*"
+    }
+   });
+
+   io.on("connection",(socket)=>{
+    console.log(socket.id);
+
+    socket.on("join",async(data)=>{
+
+      console.log(data);
+      const {userId,userType}=data;
+      if(userType=='user'){
+        await User.findByIdAndUpdate(userId,{socketId:socket.id});
+
+      }
+      else{
+        await Captain.findByIdAndUpdate(userId,{socketId:socket.id})
+      }
+
+    })
+
+    socket.on("captain_live_location",async(data)=>{
+      const {captainId,location}=data;
+      console.log(captainId);
+      console.log(location);
+      try{
+       await Captain.findByIdAndUpdate(
+  captainId,
+  {
+    $set: {
+      "vehicle.location.lat": location.ltd,
+      "vehicle.location.lng": location.lng
+    }
+  },
+  { new: true } // return updated document
+);
+
+      }
+      catch(err){
+        console.log(err);
+
+      }
+
+    })
+   })
+
 
    app.use(bodyParser.json());
    app.use(bodyParser.urlencoded({extended:true}));
    app.use(cookieParser());
   app.use(cors({
-  origin: "http://localhost:5173", // your React app
+  origin: "*", // your React app
   credentials: true,               // allow cookies/auth headers
 }));
    app.use("/api",appRouter)
 
  
 
-   app.listen(PORT,async()=>{
+    server.listen(PORT,async()=>{
      console.log(`listening on the port ${PORT}`);
      await connect();
      console.log("connected to the db");

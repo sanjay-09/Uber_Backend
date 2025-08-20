@@ -51,15 +51,19 @@ const captainSchema=new mongoose.Schema({
         
     },
     location:{
-        latitude:{
-            type:String
+        ltd:{
+            type:Number
         },
-        longitude:{
-            type:String
+        lng:{
+            type:Number
         }
-    }
+    },
+    
 
-  }
+  },
+  socketId:{
+      type:String
+    }
 },{timestamps:true});
 
 captainSchema.pre("save",function(next){
