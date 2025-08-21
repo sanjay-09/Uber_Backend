@@ -62,4 +62,7 @@ router.post("/ride",(req,res)=>{
 
 })
 
+
+router.get("/captains",CaptainController.testCaptains);
+
 export default router;

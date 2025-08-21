@@ -37,6 +37,19 @@ class CaptainService extends CrudService{
 
         }
     }
+    async captainInRadius(data){
+        try{
+            const {ltd,lng,radius}=data;
+            console.log(data);
+            const captains=await this.repo.getCaptainInRadius(ltd,lng,radius);
+            return captains;
+
+        }
+        catch(err){
+            throw err;
+
+        }
+    }
 
 }
 export default CaptainService;

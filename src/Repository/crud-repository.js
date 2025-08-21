@@ -18,11 +18,13 @@ class CrudRepository{
 
     async getById(model_id){
         try{
+            console.log("id");
             const res=await this.model.findById(model_id);
             return res;
 
         }
         catch(err){
+            console.log(err);
             throw err;
         }
     }

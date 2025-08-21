@@ -17,6 +17,7 @@ class CrudService{
     }
     async getById(model_id){
         try{
+            console.log("id");
             const res=await this.repo.getById(model_id);
             return res;
 

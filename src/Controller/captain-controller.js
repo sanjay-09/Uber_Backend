@@ -93,9 +93,34 @@ const logout=async(req,res)=>{
         })
     }
 }
+
+const testCaptains=async(req,res)=>{
+    try{
+  
+        const cap=await captainService.captainInRadius(req.query);
+        return res.status(200).json({
+            data:cap,
+            message:"ok"
+        })
+
+
+
+
+
+    }
+    catch(err){
+        return res.status(500).json({
+            data:"",
+            err:err,
+            message:"no captain"
+        })
+    }
+
+}
 export{
     create,
     login,
     getCaptainProfile,
-    logout
+    logout,
+    testCaptains
 }

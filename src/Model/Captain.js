@@ -50,16 +50,17 @@ const captainSchema=new mongoose.Schema({
         enum:["pending","car","motorcycle","auto"],
         
     },
-    location:{
-        ltd:{
-            type:Number
-        },
-        lng:{
-            type:Number
-        }
+  },
+  location: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point"
     },
-    
-
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      required: true
+    }
   },
   socketId:{
       type:String

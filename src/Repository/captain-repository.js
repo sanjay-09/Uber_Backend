@@ -18,5 +18,27 @@ class CaptainRepository extends CrudRepository{
         }
     }
 
+    async getCaptainInRadius(ltd,lng,radius){
+        try{
+            const ultd=Number(ltd);
+            const ulng=Number(lng);
+         const captains = await Captain.find({
+  location: {
+    $geoWithin: {
+      $centerSphere: [[lng, ltd], radius / 6378.1] // if radius in miles
+    }
+  }
+});
+            console.log(captains);
+            return captains;
+
+
+        }
+        catch(err){
+            throw err;
+
+        }
+    }
+
 }
 export default CaptainRepository;

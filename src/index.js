@@ -12,10 +12,16 @@ import {Server} from "socket.io"
 import User from "./Model/user.js";
 import Captain from "./Model/Captain.js";
 
+let io;
+
+
+
+
+
 const setUpAndStartServer=()=>{
    const app=express();
    const server=http.createServer(app);
-   const io=new Server(server,{
+   io=new Server(server,{
     cors:{
       origin:"*"
     }
@@ -47,11 +53,13 @@ const setUpAndStartServer=()=>{
   captainId,
   {
     $set: {
-      "vehicle.location.lat": location.ltd,
-      "vehicle.location.lng": location.lng
+      location: {
+        type: "Point",
+        coordinates: [location.lng, location.ltd]
+      }
     }
-  },
-  { new: true } // return updated document
+  }
+
 );
 
       }
@@ -88,3 +96,8 @@ const setUpAndStartServer=()=>{
 
 }
 setUpAndStartServer();
+
+export {
+  io
+}
+

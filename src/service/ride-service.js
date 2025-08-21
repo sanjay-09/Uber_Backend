@@ -2,14 +2,15 @@ import {RideRepository} from "../Repository/index.js"
 import { BASE_FARE, PER_KM_RATE } from "../Config/serverConfig.js";
 import LocationService from "./location-service.js";
 import crypto from "crypto";
+import CrudService from "./crud-service.js";
 
 
-class RideService{
+class RideService extends CrudService{
     constructor(){
+        const rideRepository=new RideRepository();
+        super(rideRepository);
         this.rideRepository=new RideRepository();
         this.locationService=new LocationService();
-        
-
     }
      getFare(distance,time){
         try{
@@ -108,6 +109,18 @@ class RideService{
         }
         catch(err){
              throw err;
+
+        }
+    }
+
+    async getById(ride_id){
+        try{
+            const data=await this.rideRepository.getById(ride_id);
+            return data;
+
+        }
+        catch(err){
+            throw err;
 
         }
     }
