@@ -3,6 +3,7 @@ import { BASE_FARE, PER_KM_RATE } from "../Config/serverConfig.js";
 import LocationService from "./location-service.js";
 import crypto from "crypto";
 import CrudService from "./crud-service.js";
+import Ride from "../Model/Ride.js";
 
 
 class RideService extends CrudService{
@@ -67,7 +68,7 @@ class RideService extends CrudService{
     async create(data){
        try{
          const {userId,origin,destination,vehicleType}=data;
-         console.log(vehicleType);
+   
  
         const res=await this.getDistanceAndTime(origin,destination);
 
@@ -117,6 +118,65 @@ class RideService extends CrudService{
         try{
             const data=await this.rideRepository.getById(ride_id);
             return data;
+
+        }
+        catch(err){
+            throw err;
+
+        }
+    }
+    async confirmRide(ridedata){
+        try{
+            const {captainId,rideId}=ridedata;
+            const ride=await Ride.findByIdAndUpdate(rideId,{
+                captainId:captainId,
+                status:"accepted"
+            },{new:true}).populate("userId").populate("captainId")
+            return ride;
+
+        }
+        catch(err){
+            throw err;
+
+        }
+    }
+    async rideComplete(rideId){
+        try{
+            const ride=await Ride.findByIdAndUpdate(rideId,{
+                status:"completed"
+            }).populate("userId").populate("captainId");
+            return ride;
+
+        }
+        catch(err){
+            throw err;
+
+        }
+    }
+
+    async confirmOTPAndStart(rideId,otp){
+        try{
+
+            const ride = await Ride.findById(rideId).select('+otp').populate("userId").populate("captainId");
+            ride.status="ongoing";
+            await ride.save();
+            if(ride.otp!==otp){
+                throw new Error("otp does not match");
+
+            }
+          
+            return ride;
+            
+
+        }
+        catch(err){
+            throw err;
+        }
+    }
+    async deleteRide(rideId){
+        try{
+            const res=await this.rideRepository.deleteById(rideId);
+            return res;
 
         }
         catch(err){

@@ -7,6 +7,7 @@ class RideRepository extends CrudRepository{
     }
     async getById(ride_id){
         try{
+           
             const data=await Ride.findById(ride_id).populate("userId");
             return data;
 
@@ -16,5 +17,7 @@ class RideRepository extends CrudRepository{
             throw err;
         }
     }
+    
+    
 }
 export default RideRepository;

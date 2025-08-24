@@ -28,6 +28,19 @@ class CrudRepository{
             throw err;
         }
     }
+    async deleteById(model_id){
+        try{
+            console.log("delete");
+            const res=await this.model.findByIdAndDelete(model_id);
+            return res;
+
+        }
+        catch(err){
+            console.log(err);
+            throw err;
+
+        }
+    }
     
 
 }

@@ -3,7 +3,7 @@ import { GOOGLE_CLOUD_API } from "../Config/serverConfig.js";
 
 class LocationService{
     async getCoordinates(address){
-        console.log("hitting");
+       
         try{
            const response = await axios.get("https://maps.googleapis.com/maps/api/geocode/json", {
       params: {
@@ -14,8 +14,7 @@ class LocationService{
 
     if (response.data.status === "OK") {
       const location = response.data.results[0].geometry.location;
-      console.log("Latitude:", location.lat);
-      console.log("Longitude:", location.lng);
+     
       return {
         lat:location.lat,
         lng:location.lng
@@ -44,8 +43,7 @@ class LocationService{
 
     if (response.data.status === "OK") {
       const element = response.data.rows[0].elements[0];
-      console.log("Distance:", element.distance.text);
-      console.log("Duration:", element.duration.text);
+    
       return {
         distance: element.distance.text,
         duration: element.duration.text,
@@ -76,7 +74,7 @@ class LocationService{
         place_id: pred.place_id,
       }));
 
-      console.log("Suggestions:", suggestions);
+     
       return suggestions;
     } else {
       console.error("Error:", response.data.status);

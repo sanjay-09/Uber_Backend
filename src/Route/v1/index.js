@@ -50,7 +50,7 @@ router.get("/getSuggestions",LocationInputValidator,authMiddleware("user"),Locat
 
 //ride
 
-router.post("/ride/create",rideCreateValidator,authMiddleware("user"),RideController.create);
+router.post("/ride/create",rideCreateValidator,Validator,authMiddleware("user"),RideController.create);
 router.get("/ride/getFare",rideFareValidator,authMiddleware("user"),RideController.ridesFare);
 
 
@@ -64,5 +64,10 @@ router.post("/ride",(req,res)=>{
 
 
 router.get("/captains",CaptainController.testCaptains);
+
+router.post("/ride/confirm",authMiddleware("captain"),RideController.rideConfirm)
+router.post("/ride/complete",authMiddleware("captain"),RideController.rideCompleted);
+router.get("/ride/verify-otp",authMiddleware("captain"),RideController.confirmOTPAndStartRide)
+router.delete("/ride/delete",authMiddleware("user"),RideController.deleteRide);
 
 export default router;
